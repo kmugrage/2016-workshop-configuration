@@ -1,14 +1,14 @@
 pipelines:
-  DeployStaging:
-    group: Operations
+  FunctionalTesting:
+    group: Development
+    locking: on
 
     materials:
-      FunctionalTesting:
-        pipeline: FunctionalTesting
-        stage: FunctionalTest
-      UserAcceptance:
-        pipeline: UserAcceptance
-        stage: Approved
+      services:
+        pipeline: Application
+        stage: package
+      AppGit:
+        git: /vagrant/application
 
     stages:
       - DeployApplications:
@@ -17,7 +17,7 @@ pipelines:
             deploy:
               tasks:
                 - fetch:
-                    pipeline: Application/UserAcceptance
+                    pipeline: Application
                     stage: Package
                     job: MakePackage
                     is_file: yes
@@ -31,4 +31,5 @@ pipelines:
                     command: /bin/bash
                     arguments:
                       - -c
-                      - "installer/deploy_application.sh Staging"
+                      - "installer/deploy_application.sh FunctionalTesting"
+
