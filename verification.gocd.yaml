@@ -85,4 +85,4 @@ pipelines:
                 - exec:
                     command: /bin/echo
                     arguments:
-                      - -"Approved"
+                      - "Approved"
