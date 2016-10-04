@@ -42,3 +42,47 @@ pipelines:
                     arguments:
                       - -c
                       - functional_test/functional_test.sh
+
+  FunctionalTesting:
+    group: Development
+    locking: on
+
+    materials:
+      services:
+        pipeline: Application
+        stage: package
+      AppGit:
+        git: /vagrant/application
+
+    stages:
+      - DeployApplications:
+          clean_workspace: yes
+          jobs:
+            deploy:
+              tasks:
+                - fetch:
+                    pipeline: Application
+                    stage: Package
+                    job: MakePackage
+                    is_file: yes
+                    source: installer.tgz
+                - exec:
+                    command: /bin/bash 
+                    arguments:
+                      - -c
+                      - "tar xfvz installer.tgz"
+                - exec:
+                    command: /bin/bash
+                    arguments:
+                      - -c
+                      - "installer/deploy_application.sh FunctionalTesting"
+      - Approval:
+          approval:
+            type: manual
+          jobs:
+            Approve:
+              tasks:
+                - exec:
+                    command: /bin/echo
+                    arguments:
+                      - -"Approved"
