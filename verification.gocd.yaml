@@ -36,11 +36,6 @@ pipelines:
           jobs:
             runTests:
               run_instances: 3
-              artifacts:
-                - build:
-                    source: testoutput
-              tabs:
-                report: testoutput/output.txt
               tasks:
                 - exec:
                     command: /bin/bash
