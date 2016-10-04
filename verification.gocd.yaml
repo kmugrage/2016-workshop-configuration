@@ -32,4 +32,18 @@ pipelines:
                     arguments:
                       - -c
                       - "installer/deploy_application.sh FunctionalTesting"
-
+      - FunctionalTest:
+          jobs:
+            runTests:
+              run_instances: 3
+              artifacts:
+                - build:
+                    source: testoutput
+              tabs:
+                report: testoutput/output.txt
+              tasks:
+                - exec:
+                    command: /bin/bash
+                    arguments:
+                      - -c
+                      - functional_test/functional_test.sh
