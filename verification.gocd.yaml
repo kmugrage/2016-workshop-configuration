@@ -43,7 +43,7 @@ pipelines:
                       - -c
                       - functional_test/functional_test.sh
 
-  FunctionalTesting:
+  UAT:
     group: Development
     locking: on
 
