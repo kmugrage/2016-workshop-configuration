@@ -8,7 +8,7 @@ pipelines:
         stage: FunctionalTest
       UserAcceptance:
         pipeline: UAT
-        stage: Approved
+        stage: Approval
 
     stages:
       - DeployApplications:
