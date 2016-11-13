@@ -32,3 +32,4 @@ pipelines:
                     arguments:
                       - -c
                       - "installer/deploy_application.sh FunctionalTesting"
+
