@@ -8,7 +8,7 @@ pipelines:
         pipeline: Application
         stage: Package
       AppGit:
-        git: /gitrepo/application
+        git: /vagrant/application
 
     stages:
       - DeployApplications:
@@ -32,57 +32,3 @@ pipelines:
                     arguments:
                       - -c
                       - "installer/deploy_application.sh FunctionalTesting"
-      - FunctionalTest:
-          jobs:
-            runTests:
-              run_instances: 3
-              tasks:
-                - exec:
-                    command: /bin/bash
-                    arguments:
-                      - -c
-                      - functional_test/functional_test.sh
-
-  UAT:
-    group: Development
-    locking: on
-
-    materials:
-      services:
-        pipeline: Application
-        stage: Package
-      AppGit:
-        git: /gitrepo/application
-
-    stages:
-      - DeployApplications:
-          clean_workspace: yes
-          jobs:
-            deploy:
-              tasks:
-                - fetch:
-                    pipeline: Application
-                    stage: Package
-                    job: MakePackage
-                    is_file: yes
-                    source: installer.tgz
-                - exec:
-                    command: /bin/bash 
-                    arguments:
-                      - -c
-                      - "tar xfvz installer.tgz"
-                - exec:
-                    command: /bin/bash
-                    arguments:
-                      - -c
-                      - "installer/deploy_application.sh FunctionalTesting"
-      - Approval:
-          approval:
-            type: manual
-          jobs:
-            Approve:
-              tasks:
-                - exec:
-                    command: /bin/echo
-                    arguments:
-                      - "Approved"
